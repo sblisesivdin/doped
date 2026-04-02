@@ -153,19 +153,71 @@ print(f"Final Energy: {{atoms.get_potential_energy()}} eV")
 """
         return script
 
-def _get_site_potentials_from_calc(calc) -> np.ndarray:
+def _get_site_potentials_from_calc(calc, core_radius: float = 1.0) -> np.ndarray:
     """
     Helper to extract site potentials from a GPAW calculator.
+    
+    Instead of taking the potential at a single exact grid point, this calculates 
+    the average potential within a spherical core region around each atom. This 
+    matches the site potential evaluation method used by VASP and sxdefectalign, 
+    making the values significantly more stable and grid-independent.
+    
+    Args:
+        calc: The attached GPAW calculator.
+        core_radius (float): The radius of the sphere (in Angstroms) over which 
+                             to average the potential. Default is 1.0 Angs.
+                             
+    Returns:
+        np.ndarray: An array of averaged site potentials for each atom.
     """
     atoms = calc.get_atoms()
-    v_ext = calc.get_electrostatic_potential()
+    v_ext = calc.get_electrostatic_potential()  # 3D grid of potentials
     gd = calc.hamiltonian.finegd
     
+    # Get the Cartesian coordinates for every point on the 3D grid
+    # gd.get_grid_point_coordinates() returns an array of shape (3, Nx, Ny, Nz)
+    grid_coords = gd.get_grid_point_coordinates()
+    
     site_potentials = []
+    
     for atom in atoms:
-        indices = gd.get_nearest_grid_point(atom.position)
-        val = v_ext[tuple(indices % gd.N_c)]
-        site_potentials.append(val)
+        # Calculate the distance from the current atom to every point on the grid
+        # We use periodic boundary conditions handling if necessary, but for core 
+        # radii (which are small), direct Cartesian distance is usually sufficient 
+        # unless the atom is sitting exactly on the cell boundary.
+        
+        # To strictly handle periodic boundaries:
+        diff = grid_coords - atom.position[:, None, None, None]
+        
+        # Apply minimum image convention for periodic boundaries
+        cell = atoms.get_cell()
+        if cell.orthorhombic:
+            # Fast path for orthorhombic cells
+            for i in range(3):
+                diff[i] -= cell[i, i] * np.round(diff[i] / cell[i, i])
+        else:
+            # Fractional conversion for skewed cells
+            inv_cell = np.linalg.inv(cell)
+            frac_diff = np.einsum('ij,j...->i...', inv_cell, diff)
+            frac_diff -= np.round(frac_diff)
+            diff = np.einsum('ij,j...->i...', cell, frac_diff)
+            
+        # Calculate Euclidean distance for each grid point
+        distances = np.linalg.norm(diff, axis=0)
+        
+        # Create a boolean mask for points within the core radius
+        mask = distances <= core_radius
+        
+        # Calculate the mean potential of the points inside the sphere
+        if np.any(mask):
+            avg_val = np.mean(v_ext[mask])
+        else:
+            # Fallback to nearest grid point if the grid is exceptionally coarse
+            # or the radius is set too small.
+            indices = gd.get_nearest_grid_point(atom.position)
+            avg_val = v_ext[tuple(indices % gd.N_c)]
+            
+        site_potentials.append(avg_val)
         
     return np.array(site_potentials)
 
