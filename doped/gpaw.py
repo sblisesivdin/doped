@@ -13,6 +13,7 @@ from pymatgen.entries.computed_entries import ComputedStructureEntry, ComputedEn
 from doped.core import DefectEntry
 from doped.utils.parsing import _get_defect_supercell, _get_bulk_supercell
 from doped.analysis import defect_from_structures
+from scipy.interpolate import RegularGridInterpolator
 
 class GPAWDefectRelaxSet:
     """
@@ -153,73 +154,83 @@ print(f"Final Energy: {{atoms.get_potential_energy()}} eV")
 """
         return script
 
-def _get_site_potentials_from_calc(calc, core_radius: float = 1.0) -> np.ndarray:
+def _get_site_potentials_from_calc(calc, beta_bohr: float = 1.5) -> np.ndarray:
     """
-    Helper to extract site potentials from a GPAW calculator.
+    Helper to extract site potentials from a GPAW calculator using 
+    Gaussian spherical averaging in reciprocal space.
     
-    Instead of taking the potential at a single exact grid point, this calculates 
-    the average potential within a spherical core region around each atom. This 
-    matches the site potential evaluation method used by VASP and sxdefectalign, 
-    making the values significantly more stable and grid-independent.
+    This replaces the flat volumetric mean with a Gaussian weighted average 
+    via FFT, matching the smoothing method used by sxdefectalign and 
+    Quantum Espresso implementations in doped.
     
     Args:
         calc: The attached GPAW calculator.
-        core_radius (float): The radius of the sphere (in Angstroms) over which 
-                             to average the potential. Default is 1.0 Angs.
-                             
+        beta_bohr (float): Gaussian broadening factor at atomic sites (in bohr).
+                           Default is 1.5 to match sxdefectalign.
+                           
     Returns:
-        np.ndarray: An array of averaged site potentials for each atom.
+        np.ndarray: An array of Gaussian-averaged site potentials for each atom.
     """
     atoms = calc.get_atoms()
-    v_ext = calc.get_electrostatic_potential()  # 3D grid of potentials
-    gd = calc.hamiltonian.finegd
+    v_ext = calc.get_electrostatic_potential()  # 3D grid in eV natively
+    nx, ny, nz = v_ext.shape
+
+    # Setup reciprocal lattice and broadening
+    ang_to_bohr = 1.8897259886
     
-    # Get the Cartesian coordinates for every point on the 3D grid
-    # gd.get_grid_point_coordinates() returns an array of shape (3, Nx, Ny, Nz)
-    grid_coords = gd.get_grid_point_coordinates()
+    # ASE cell.reciprocal() returns the inverse matrix (A * B^T = I). 
+    # We multiply by 2*pi to get the standard physics reciprocal lattice definition.
+    reci_cell = atoms.cell.reciprocal() * 2 * np.pi
     
-    site_potentials = []
-    
-    for atom in atoms:
-        # Calculate the distance from the current atom to every point on the grid
-        # We use periodic boundary conditions handling if necessary, but for core 
-        # radii (which are small), direct Cartesian distance is usually sufficient 
-        # unless the atom is sitting exactly on the cell boundary.
+    # Get reciprocal lattice vector lengths and convert to Bohr^-1
+    dgx = np.linalg.norm(reci_cell[0]) / ang_to_bohr
+    dgy = np.linalg.norm(reci_cell[1]) / ang_to_bohr
+    dgz = np.linalg.norm(reci_cell[2]) / ang_to_bohr
+
+    # Setup G-vector grid
+    gx = np.roll(np.arange(-nx // 2, nx // 2, 1, dtype=int), int(nx // 2)) * dgx
+    gy = np.roll(np.arange(-ny // 2, ny // 2, 1, dtype=int), int(ny // 2)) * dgy
+    gz = np.roll(np.arange(-nz // 2, nz // 2, 1, dtype=int), int(nz // 2)) * dgz
+
+    Gx, Gy, Gz = np.meshgrid(gx, gy, gz, indexing="ij")
+    g2 = Gx ** 2 + Gy ** 2 + Gz ** 2
+
+    # Gaussian averaging via FFT
+    gaussian = np.exp(-0.5 * (beta_bohr ** 2) * g2)
+
+    # FFT to reciprocal space, apply blur, and transform back
+    v_G = np.fft.fftn(v_ext)
+    v_G *= gaussian
+    smoothed_potential = np.real(np.fft.ifftn(v_G))
+
+    # 4. Interpolate potentials at the exact atomic fractional coordinates
+    xpoints = np.linspace(0.0, 1.0, nx, endpoint=False)
+    ypoints = np.linspace(0.0, 1.0, ny, endpoint=False)
+    zpoints = np.linspace(0.0, 1.0, nz, endpoint=False)
+
+    x_max, y_max, z_max = xpoints[-1], ypoints[-1], zpoints[-1]
+
+    interpolator = RegularGridInterpolator(
+        (xpoints, ypoints, zpoints),
+        smoothed_potential,
+        method='linear',
+        bounds_error=True,
+    )
+
+    # Fractional coordinates naturally handle the periodic boundaries
+    frac_coords = atoms.get_scaled_positions()
+    atomic_site_potentials = np.zeros(len(atoms))
+
+    for i, frac in enumerate(frac_coords):
+        # Ensure coordinates fall within the [0, 1) bounds for the interpolator
+        frac = np.mod(frac, 1.0)
+        frac[0] = np.clip(frac[0], 0.0, x_max)
+        frac[1] = np.clip(frac[1], 0.0, y_max)
+        frac[2] = np.clip(frac[2], 0.0, z_max)
         
-        # To strictly handle periodic boundaries:
-        diff = grid_coords - atom.position[:, None, None, None]
-        
-        # Apply minimum image convention for periodic boundaries
-        cell = atoms.get_cell()
-        if cell.orthorhombic:
-            # Fast path for orthorhombic cells
-            for i in range(3):
-                diff[i] -= cell[i, i] * np.round(diff[i] / cell[i, i])
-        else:
-            # Fractional conversion for skewed cells
-            inv_cell = np.linalg.inv(cell)
-            frac_diff = np.einsum('ij,j...->i...', inv_cell, diff)
-            frac_diff -= np.round(frac_diff)
-            diff = np.einsum('ij,j...->i...', cell, frac_diff)
-            
-        # Calculate Euclidean distance for each grid point
-        distances = np.linalg.norm(diff, axis=0)
-        
-        # Create a boolean mask for points within the core radius
-        mask = distances <= core_radius
-        
-        # Calculate the mean potential of the points inside the sphere
-        if np.any(mask):
-            avg_val = np.mean(v_ext[mask])
-        else:
-            # Fallback to nearest grid point if the grid is exceptionally coarse
-            # or the radius is set too small.
-            indices = gd.get_nearest_grid_point(atom.position)
-            avg_val = v_ext[tuple(indices % gd.N_c)]
-            
-        site_potentials.append(avg_val)
-        
-    return np.array(site_potentials)
+        atomic_site_potentials[i] = float(interpolator([frac])[0])
+
+    return atomic_site_potentials
 
 def _get_planar_averaged_potential_from_calc(calc) -> Dict[str, np.ndarray]:
     """
