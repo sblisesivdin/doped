@@ -1,10 +1,9 @@
-
 import unittest
 import os
 import shutil
+import numpy as np
 from pymatgen.core.structure import Structure
-from doped.gpaw import GPAWDefectRelaxSet
-from doped.generation import DefectsGenerator
+from doped.gpaw import GPAWDefectRelaxSet, GPAWDefectsParser
 
 class GPAWTest(unittest.TestCase):
     def setUp(self):
@@ -13,7 +12,7 @@ class GPAWTest(unittest.TestCase):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
         
-        # Create a simple structure for testing
+        # Create a simple structure for testing input generation
         self.structure = Structure.from_file(os.path.join(self.data_dir, "Cu_prim_POSCAR"))
 
     def tearDown(self):
@@ -36,7 +35,7 @@ class GPAWTest(unittest.TestCase):
     def test_gpaw_defect_relax_set_custom(self):
         # Test with custom settings
         gpaw_settings = {
-            "mode": {"name": "pw", "ecut": 300},
+            "mode": {"name": "pw", "ecut": 400},
             "xc": "PBE",
             "kpts": {"size": (2, 2, 2), "gamma": True},
         }
@@ -48,7 +47,7 @@ class GPAWTest(unittest.TestCase):
         with open(os.path.join(self.output_dir, "relax.py"), "r") as f:
             content = f.read()
             self.assertIn("charge=-1", content)
-            self.assertIn("mode=PW(ecut=300)", content)
+            self.assertIn("mode=PW(ecut=400)", content)
             self.assertIn("'size': (2, 2, 2)", content)
             self.assertIn("from gpaw import GPAW, PW, LCAO, FD", content)
 
@@ -65,42 +64,48 @@ class GPAWTest(unittest.TestCase):
             self.assertIn("mode=LCAO(basis='dzp')", content)
             self.assertIn("from gpaw import GPAW, PW, LCAO, FD", content)
 
-    def test_gpaw_parser(self):
-        from unittest.mock import MagicMock, patch
-        from doped.gpaw import GPAWParser
+    def test_gpaw_kumagai_correction_mgo(self):
+        """
+        Test that the GPAW parser correctly extracts electrostatic potentials 
+        and calculates the eFNV (Kumagai) correction using real static .gpw files.
+        """
+        # Path to the static test data directories
+        gpaw_mgo_dir = os.path.join(self.data_dir, "gpaw_mgo_test")
+        gpaw_bulk_dir = os.path.join(gpaw_mgo_dir, "bulk")
         
-        # Mock GPAW calculator and atoms
-        with patch("gpaw.GPAW") as mock_gpaw:
-            mock_calc = MagicMock()
-            mock_gpaw.return_value = mock_calc
-            
-            mock_atoms = MagicMock()
-            mock_calc.get_atoms.return_value = mock_atoms
-            mock_calc.get_potential_energy.return_value = -10.5
-            mock_calc.get_fermi_level.return_value = 2.0
-            mock_calc.get_number_of_spins.return_value = 1
-            mock_calc.get_ibz_k_points.return_value = [0]
-            mock_calc.get_eigenvalues.return_value = [1.0, 1.5, 2.5, 3.0]
-            
-            # Mock AseAtomsAdaptor
-            with patch("pymatgen.io.ase.AseAtomsAdaptor.get_structure") as mock_get_struct:
-                mock_get_struct.return_value = self.structure
-                
-                parser = GPAWParser("dummy.gpw")
-                
-                self.assertEqual(parser.energy, -10.5)
-                self.assertEqual(parser.structure, self.structure)
-                
-                band_gap, cbm, vbm, efermi = parser.get_eigenvalue_properties()
-                self.assertEqual(efermi, 2.0)
-                self.assertEqual(vbm, 1.5)
-                self.assertEqual(cbm, 2.5)
-                self.assertEqual(band_gap, 1.0)
-                
-                # Test get_computed_entry
-                entry = parser.get_computed_entry()
-                self.assertEqual(entry.energy, -10.5)
-                self.assertEqual(entry.composition, self.structure.composition)
+        # Ensure the test directories exist
+        self.assertTrue(os.path.exists(gpaw_bulk_dir), "Bulk test directory missing!")
+        
+        # Initialize the parser exactly as it's used in the automation script
+        dp_gpaw = GPAWDefectsParser(
+            output_path=gpaw_mgo_dir, 
+            bulk_path=gpaw_bulk_dir, 
+            dielectric=10.0 
+        )
+        
+        # Parse the defects
+        defect_dict = dp_gpaw.parse_all()
+        self.assertGreater(len(defect_dict), 0, "No defects were parsed!")
+        
+        # Extract the defect entry and its corrections dict
+        # Since we only saved one defect folder (v_Mg_-2), it will be the only item
+        defect_entry = list(defect_dict.values())[0]
+        corrections = defect_entry.corrections
+        
+        # Verify the Kumagai correction exists
+        self.assertIn('kumagai_charge_correction', corrections, "Kumagai correction missing from parsed output!")
+        
+        # Verify the value matches the exact output of our local coarse calculation
+        expected_energy = 0.588754 
+        calculated_energy = float(corrections['kumagai_charge_correction'])
+        
+        # Assert they match tightly
+        np.testing.assert_allclose(
+            calculated_energy, 
+            expected_energy, 
+            atol=1e-5, 
+            err_msg=f"GPAW Kumagai calculation changed! Expected ~{expected_energy}, got {calculated_energy}"
+        )
 
 if __name__ == "__main__":
     unittest.main()
