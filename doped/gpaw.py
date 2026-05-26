@@ -160,18 +160,6 @@ def _get_site_potentials_from_calc(calc, beta_bohr: float = 1.5) -> np.ndarray:
     """
     Helper to extract site potentials from a GPAW calculator using 
     Gaussian spherical averaging in reciprocal space.
-    
-    This replaces the flat volumetric mean with a Gaussian weighted average 
-    via FFT, matching the smoothing method used by sxdefectalign and 
-    Quantum Espresso implementations in doped.
-    
-    Args:
-        calc: The attached GPAW calculator.
-        beta_bohr (float): Gaussian broadening factor at atomic sites (in bohr).
-                           Default is 1.5 to match sxdefectalign.
-                           
-    Returns:
-        np.ndarray: An array of Gaussian-averaged site potentials for each atom.
     """
     atoms = calc.get_atoms()
     v_ext = calc.get_electrostatic_potential()  # 3D grid in eV natively
@@ -179,17 +167,12 @@ def _get_site_potentials_from_calc(calc, beta_bohr: float = 1.5) -> np.ndarray:
 
     # Setup reciprocal lattice and broadening
     ang_to_bohr = 1.8897259886
-    
-    # ASE cell.reciprocal() returns the inverse matrix (A * B^T = I). 
-    # We multiply by 2*pi to get the standard physics reciprocal lattice definition.
     reci_cell = atoms.cell.reciprocal() * 2 * np.pi
     
-    # Get reciprocal lattice vector lengths and convert to Bohr^-1
     dgx = np.linalg.norm(reci_cell[0]) / ang_to_bohr
     dgy = np.linalg.norm(reci_cell[1]) / ang_to_bohr
     dgz = np.linalg.norm(reci_cell[2]) / ang_to_bohr
 
-    # Setup G-vector grid
     gx = np.roll(np.arange(-nx // 2, nx // 2, 1, dtype=int), int(nx // 2)) * dgx
     gy = np.roll(np.arange(-ny // 2, ny // 2, 1, dtype=int), int(ny // 2)) * dgy
     gz = np.roll(np.arange(-nz // 2, nz // 2, 1, dtype=int), int(nz // 2)) * dgz
