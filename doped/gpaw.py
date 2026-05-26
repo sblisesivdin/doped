@@ -198,37 +198,37 @@ def _get_site_potentials_from_calc(calc, beta_bohr: float = 1.5) -> np.ndarray:
     # Gaussian averaging via FFT
     gaussian = np.exp(-0.5 * (beta_bohr ** 2) * g2)
 
-    # FFT to reciprocal space, apply blur, and transform back
     v_G = np.fft.fftn(v_ext)
     v_G *= gaussian
     smoothed_potential = np.real(np.fft.ifftn(v_G))
 
-    # 4. Interpolate potentials at the exact atomic fractional coordinates
+    # Robust Parsing Logic
     xpoints = np.linspace(0.0, 1.0, nx, endpoint=False)
     ypoints = np.linspace(0.0, 1.0, ny, endpoint=False)
     zpoints = np.linspace(0.0, 1.0, nz, endpoint=False)
 
-    x_max, y_max, z_max = xpoints[-1], ypoints[-1], zpoints[-1]
+    # pad the grid with periodic images so (cubic) interpolation works at cell boundaries:
+    xpoints_padded = np.concatenate([xpoints[-1:] - 1.0, xpoints, xpoints[:1] + 1.0])
+    ypoints_padded = np.concatenate([ypoints[-1:] - 1.0, ypoints, ypoints[:1] + 1.0])
+    zpoints_padded = np.concatenate([zpoints[-1:] - 1.0, zpoints, zpoints[:1] + 1.0])
+
+    padded = np.concatenate(
+        [smoothed_potential[-1:, :, :], smoothed_potential, smoothed_potential[:1, :, :]], axis=0
+    )
+    padded = np.concatenate([padded[:, -1:, :], padded, padded[:, :1, :]], axis=1)
+    padded = np.concatenate([padded[:, :, -1:], padded, padded[:, :, :1]], axis=2)
 
     interpolator = RegularGridInterpolator(
-        (xpoints, ypoints, zpoints),
-        smoothed_potential,
-        method='linear',
+        (xpoints_padded, ypoints_padded, zpoints_padded),
+        padded,
+        method="cubic",
         bounds_error=True,
     )
 
-    # Fractional coordinates naturally handle the periodic boundaries
-    frac_coords = atoms.get_scaled_positions()
     atomic_site_potentials = np.zeros(len(atoms))
-
-    for i, frac in enumerate(frac_coords):
-        # Ensure coordinates fall within the [0, 1) bounds for the interpolator
-        frac = np.mod(frac, 1.0)
-        frac[0] = np.clip(frac[0], 0.0, x_max)
-        frac[1] = np.clip(frac[1], 0.0, y_max)
-        frac[2] = np.clip(frac[2], 0.0, z_max)
-        
-        atomic_site_potentials[i] = float(interpolator([frac])[0])
+    for i, frac in enumerate(atoms.get_scaled_positions()):
+        # Need to use fractional coordinates modulo 1.0 to interpolate the potentials
+        atomic_site_potentials[i] = float(interpolator(frac % 1.0)[0])
 
     return atomic_site_potentials
 
