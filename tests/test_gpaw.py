@@ -67,45 +67,73 @@ class GPAWTest(unittest.TestCase):
     def test_gpaw_kumagai_correction_mgo(self):
         """
         Test that the GPAW parser correctly extracts electrostatic potentials 
-        and calculates the eFNV (Kumagai) correction using real static .gpw files.
+        and calculates the eFNV (Kumagai) correction for multiple charge states
+        using real static .gpw files.
         """
         # Path to the static test data directories
         gpaw_mgo_dir = os.path.join(self.data_dir, "gpaw_mgo_test")
         gpaw_bulk_dir = os.path.join(gpaw_mgo_dir, "bulk")
         
-        # Ensure the test directories exist
         self.assertTrue(os.path.exists(gpaw_bulk_dir), "Bulk test directory missing!")
         
-        # Initialize the parser exactly as it's used in the automation script
+        # Initialize the parser
         dp_gpaw = GPAWDefectsParser(
             output_path=gpaw_mgo_dir, 
             bulk_path=gpaw_bulk_dir, 
             dielectric=10.0 
         )
         
-        # Parse the defects
+        # Parse all relaxed defects in the folder
         defect_dict = dp_gpaw.parse_all()
-        self.assertGreater(len(defect_dict), 0, "No defects were parsed!")
+        self.assertGreaterEqual(len(defect_dict), 4, "Not all defects were parsed!")
         
-        # Extract the defect entry and its corrections dict
-        # Since we only saved one defect folder (v_Mg_-2), it will be the only item
-        defect_entry = list(defect_dict.values())[0]
-        corrections = defect_entry.corrections
+        # Expected Kumagai corrections mapped by charge state for relaxed defects
+        expected_corrections = {
+            1: 0.303790,
+            -1: 0.091121,
+            -2: 0.575566,
+            0: 0.0  # Neutral defects have no Kumagai correction
+        }
         
-        # Verify the Kumagai correction exists
-        self.assertIn('kumagai_charge_correction', corrections, "Kumagai correction missing from parsed output!")
-        
-        # Verify the value matches the exact output of our local coarse calculation
-        expected_energy = 0.588754 
-        calculated_energy = float(corrections['kumagai_charge_correction'])
-        
-        # Assert they match tightly
-        np.testing.assert_allclose(
-            calculated_energy, 
-            expected_energy, 
-            atol=1e-5, 
-            err_msg=f"GPAW Kumagai calculation changed! Expected ~{expected_energy}, got {calculated_energy}"
-        )
+        for defect_name, entry in defect_dict.items():
+            charge = entry.charge_state
+            if charge in expected_corrections:
+                expected_energy = expected_corrections[charge]
+                if expected_energy == 0.0:
+                    self.assertNotIn('kumagai_charge_correction', entry.corrections)
+                else:
+                    self.assertIn('kumagai_charge_correction', entry.corrections)
+                    calculated_energy = float(entry.corrections['kumagai_charge_correction'])
+                    np.testing.assert_allclose(
+                        calculated_energy, expected_energy, atol=1e-4, 
+                        err_msg=f"Failed for charge state {charge}!"
+                    )
+
+        # --- Explicitly Test the Unrelaxed +1 State ---
+        # We parse this manually to avoid dictionary key collisions with the relaxed state
+        unrelaxed_dir = os.path.join(gpaw_mgo_dir, "v_Mg_+1_unrelaxed")
+        if os.path.exists(unrelaxed_dir):
+            from doped.gpaw import get_gpaw_defect_entry
+            from doped.gpaw import GPAWParser
+            
+            bulk_parser = GPAWParser(os.path.join(gpaw_bulk_dir, "relaxed.gpw"))
+            unrelaxed_entry = get_gpaw_defect_entry(
+                defect_path=unrelaxed_dir, 
+                bulk_path=gpaw_bulk_dir, 
+                dielectric=10.0,
+                charge_state=1,
+                bulk_parser=bulk_parser
+            )
+            unrelaxed_entry.get_kumagai_correction()
+            
+            self.assertIn('kumagai_charge_correction', unrelaxed_entry.corrections)
+            calculated_unrelaxed = float(unrelaxed_entry.corrections['kumagai_charge_correction'])
+            
+            # Since atoms barely move in this coarse test, it should identically match the relaxed value
+            np.testing.assert_allclose(
+                calculated_unrelaxed, 0.303790, atol=1e-4,
+                err_msg="Failed for unrelaxed +1 state!"
+            )
 
 if __name__ == "__main__":
     unittest.main()

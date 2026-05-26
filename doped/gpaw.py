@@ -47,6 +47,8 @@ class GPAWDefectRelaxSet:
         """
         self.defect_entry = defect_entry
         self.charge_state = charge_state
+        if self.charge_state is None:
+            self.charge_state = kwargs.get("charge") # Catch it if passed as kwarg
         if self.charge_state is None and isinstance(self.defect_entry, DefectEntry):
             self.charge_state = self.defect_entry.charge_state
 
@@ -289,6 +291,12 @@ class GPAWParser:
         self.atoms = self.calc.get_atoms()
         self.structure = AseAtomsAdaptor.get_structure(self.atoms)
         self.energy = self.calc.get_potential_energy()
+        
+        # Pull charge directly from calculation parameters
+        try:
+            self.charge = self.calc.parameters.get('charge', None)
+        except Exception:
+            self.charge = None
 
     def get_computed_structure_entry(self) -> ComputedStructureEntry:
         """
@@ -457,17 +465,20 @@ class GPAWDefectsParser:
                 continue
             
             print(f"Parsing {folder}...")
-            # Try to guess charge state from folder name
-            charge_state = 0
             try:
-                if "_" in folder:
-                    suffix = folder.rsplit("_", 1)[-1]
-                    if suffix.startswith(("+", "-")):
-                        charge_state = int(suffix)
-            except Exception:
-                pass
-            
-            try:
+                # Get charge from the calculation file directly
+                defect_parser = GPAWParser(os.path.join(defect_dir, "relaxed.gpw"))
+                charge_state = defect_parser.charge
+                defect_parser.close()
+                
+                # Fallback to folder name only if calculation lacked a charge parameter
+                if charge_state is None:
+                    charge_state = 0
+                    if "_" in folder:
+                        suffix = folder.rsplit("_", 1)[-1]
+                        if suffix.startswith(("+", "-")):
+                            charge_state = int(suffix)
+
                 defect_entry = get_gpaw_defect_entry(
                     defect_dir, 
                     self.bulk_path, 
