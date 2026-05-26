@@ -54,6 +54,30 @@ def main():
             **gpaw_kwargs
         )
         defect_set.write_input(defect_name)
+        
+        # A part to create an example of unrelaxed structure with +1 state
+        if "+1" in defect_name:
+            unrelaxed_name = defect_name + "_unrelaxed"
+            print(f"Setting up {unrelaxed_name}...")
+            
+            # Generate the exact same input files in a new folder
+            defect_set.write_input(unrelaxed_name)
+            
+            # Open the generated relax.py and modify it for a static run
+            relax_file = os.path.join(unrelaxed_name, "relax.py")
+            with open(relax_file, "r") as f:
+                script = f.read()
+                
+            # Comment out the ASE optimizer command so the atoms don't move
+            script = script.replace("opt.run", "# opt.run") 
+            
+            # Force a static energy calculation and save the .gpw file
+            script += "\n# Force static energy calculation (unrelaxed) and save\n"
+            script += "atoms.get_potential_energy()\n"
+            script += "calc.write('relaxed.gpw')\n"
+            
+            with open(relax_file, "w") as f:
+                f.write(script)
 
     print("Workflow setup complete! You can now run the calculations.")
 
