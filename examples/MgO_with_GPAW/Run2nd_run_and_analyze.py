@@ -98,7 +98,8 @@ try:
              print(f"Defect: {defect_name}")
              print(f"  Charge: {defect_entry.charge_state}")
              print(f"  Supercell Energy: {defect_entry.sc_entry_energy:.4f} eV")
-             print(f"  Corrections: {defect_entry.corrections}")
+             clean_corrections = {k: round(float(v), 4) for k, v in defect_entry.corrections.items()}
+             print(f"  Corrections: {clean_corrections}")
              print(f"  Formation Energy (at VBM, no chempots): {e_form_raw:.4f} eV")
              
 except Exception as e:
