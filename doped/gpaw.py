@@ -77,7 +77,7 @@ class GPAWDefectRelaxSet:
         structure_filename = "structure.cif"
         
         from pymatgen.io.cif import CifWriter
-        writer = CifWriter(self.defect_supercell, symprec=0.01)
+        writer = CifWriter(self.defect_supercell)
         writer.write_file(os.path.join(output_path, structure_filename))
 
         # Generate Python script
