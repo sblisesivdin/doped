@@ -84,8 +84,7 @@ The ``GPAWDefectsParser`` can handle multiple defect folders at once.
 Finite-Size Corrections
 -----------------------
 
-GPAW calculations of charged defects require finite-size corrections to account for periodic 
-image interactions. ``doped`` supports the **Kumagai (eFNV)** correction for GPAW.
+GPAW calculations of charged defects require finite-size corrections to account for periodic image interactions. ``doped`` supports both the **Kumagai (eFNV)** correction (highly recommended) and the standard **Freysoldt-Neugebauer-Van de Walle (FNV)** correction for GPAW.
 
 Anisotropic Systems (2D/1D)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
