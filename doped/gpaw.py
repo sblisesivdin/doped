@@ -99,6 +99,7 @@ class GPAWDefectRelaxSet:
         kpts = settings.pop("kpts", {"size": (1, 1, 1), "gamma": True})
         txt = settings.pop("txt", "gpaw_output.txt")
         convergence = settings.pop("convergence", {})
+        optimizer = settings.pop("optimizer", "BFGS")
 
         # Determine charge
         charge = self.charge_state or 0
@@ -125,7 +126,7 @@ class GPAWDefectRelaxSet:
         script = f"""
 from ase.io import read
 from gpaw import GPAW, PW, LCAO, FD
-from ase.optimize import BFGS
+from ase.optimize import {optimizer}
 import json
 
 # Read structure
@@ -149,8 +150,8 @@ energy = atoms.get_potential_energy()
 print(f"Initial Energy: {{energy}} eV")
 
 # Relaxation
-dyn = BFGS(atoms, trajectory='relax.traj')
-dyn.run(fmax={fmax})
+dyn = {optimizer}(atoms, trajectory='relax.traj')
+dyn.run(fmax={{fmax}})
 
 # Save the final state
 calc.write('relaxed.gpw')
