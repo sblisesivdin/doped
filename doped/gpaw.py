@@ -151,7 +151,7 @@ print(f"Initial Energy: {{energy}} eV")
 
 # Relaxation
 dyn = {optimizer}(atoms, trajectory='relax.traj')
-dyn.run(fmax={{fmax}})
+dyn.run(fmax={fmax})
 
 # Save the final state
 calc.write('relaxed.gpw')
