@@ -34,14 +34,14 @@ class GPAWDefectRelaxSet:
             charge_state (int):
                 Charge state of the defect. Overrides DefectEntry.charge_state.
             gpaw_settings (dict):
-                Dictionary of GPAW settings (mode, xc, kpts, etc.).
-                Example:
-                {
-                    "mode": {"name": "pw", "ecut": 300},
-                    "xc": "PBE",
-                    "kpts": {"size": (2, 2, 2), "gamma": True},
-                    "txt": "gpaw_output.txt"
-                }
+                Dictionary of GPAW settings. Defaults used if not specified:
+                - "mode": {"name": "pw", "ecut": 400}
+                - "xc": "PBE"
+                - "kpts": {"size": (1, 1, 1), "gamma": True}
+                - "txt": "gpaw_output.txt"
+                - "spinpol": True
+                - "fmax": 0.05
+                - "optimizer": "BFGS"
             **kwargs:
                 Additional keyword arguments.
         """
