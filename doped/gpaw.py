@@ -77,6 +77,7 @@ class GPAWDefectRelaxSet:
         structure_filename = "structure.cif"
         
         from pymatgen.io.cif import CifWriter
+        # Do not use symprec arg inside CifWriter. It reduces supercells to primitives.
         writer = CifWriter(self.defect_supercell)
         writer.write_file(os.path.join(output_path, structure_filename))
 
