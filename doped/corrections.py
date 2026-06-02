@@ -464,6 +464,7 @@ def get_kumagai_correction(
         dielectric_tensor: np.ndarray,
         defect_coords: np.ndarray | list,
         defect_region_radius: float | None = None,
+        radius_method: str = "min",
         accuracy: float = defaults.ewald_accuracy,
         unit_conversion: float = 180.95128169876497,
         excluded_indices: list | None = None,
@@ -522,11 +523,17 @@ def get_kumagai_correction(
         point_charge_correction = -ewald.lattice_energy * charge**2 if charge else 0.0
 
         if defect_region_radius is None:
-            # use half the shortest distance between parallel planes (inscribed sphere radius):
-            defect_region_radius = 0.5 * np.min(
-                [1 / np.linalg.norm(lattice.reciprocal_lattice.matrix[i]) for i in range(3)]
-            )
-            defect_region_radius *= np.pi
+            # 0.5 * np.pi / norm evaluates to d/4 (half the inscribed sphere radius)
+            distances = [0.5 * np.pi / np.linalg.norm(lattice.reciprocal_lattice.matrix[i]) for i in range(3)]
+
+            if radius_method.lower() == "min":
+                defect_region_radius = np.min(distances)
+            elif radius_method.lower() == "max":
+                defect_region_radius = np.max(distances)
+            elif radius_method.lower() == "average":
+                defect_region_radius = np.mean(distances)
+            else:
+                raise ValueError("radius_method must be 'min', 'max', or 'average'")
 
         for site, rel_coord in zip(sites, rel_coords, strict=False):
             if site.distance > defect_region_radius:
@@ -613,6 +620,7 @@ def get_kumagai_correction(
             "defect_coords", _get_defect_supercell_frac_coords(defect_entry)
         ),  # _relaxed_ defect coords (except for vacancies)
         defect_region_radius=defect_region_radius,
+        radius_method=kwargs.pop("radius_method", "min"),
         excluded_indices=excluded_indices,
         **kwargs,
     )
