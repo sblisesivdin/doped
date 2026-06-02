@@ -267,6 +267,13 @@ def get_gpaw_planar_averaged_potential(gpw_file: str) -> Dict[str, np.ndarray]:
 class GPAWParser:
     """
     Parser for GPAW calculations to interface with doped.
+    
+    Note:
+        The Kumagai (eFNV) finite-size charge correction is applied by default 
+        during parsing, as it is generally preferred. However, the standard 
+        Freysoldt (FNV) correction is also fully supported. If preferred, users 
+        can manually apply it to the parsed defects using:
+        `defect_entry.get_freysoldt_correction()`
     """
     def __init__(self, gpw_file: str):
         """
