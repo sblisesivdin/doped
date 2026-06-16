@@ -220,6 +220,8 @@ class GPAWTest(unittest.TestCase):
         self.assertGreaterEqual(len(defect_dict), 5, "Not enough Graphene defects were parsed!")
         
         # Expected Kumagai corrections mapped by defect name (values from local run)
+        # Note: The +4 charge state correction is ~41 eV due to the q^2 scaling 
+        # of the charge correction in a small 2D supercell.
         expected_corrections = {
             "v_C_D3h_C1.42_+1": 2.5146,
             "C_i_C3v_C2.00_+4": 41.0205,
