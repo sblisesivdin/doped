@@ -16,14 +16,14 @@ def run_calculation(folder):
     print(f"Processing {folder}...")
     relax_script = os.path.join(folder, "relax.py")
     
-    # Check if already run (relaxed.gpw exists)
-    if os.path.exists(os.path.join(folder, "relaxed.gpw")):
-        print(f"  relaxed.gpw exists, skipping calculation.")
+    # Check if already run (relaxed.gpw.gz exists)
+    if os.path.exists(os.path.join(folder, "relaxed.gpw.gz")):
+        print(f"  relaxed.gpw.gz exists, skipping calculation.")
         return
 
-    # Check if failed/non-conserving (gpaw_output.txt exists but relaxed.gpw doesn't)
+    # Check if failed/non-conserving (gpaw_output.txt exists but relaxed.gpw.gz doesn't)
     if os.path.exists(os.path.join(folder, "gpaw_output.txt")):
-        print(f"  gpaw_output.txt exists but relaxed.gpw does not. Skipping likely non-conserving/failed calculation.")
+        print(f"  gpaw_output.txt exists but relaxed.gpw.gz does not. Skipping likely non-conserving/failed calculation.")
         return
 
     if not os.path.exists(relax_script):

@@ -66,10 +66,10 @@ def main():
                         continue
                     f.write(line)
                 
-                # Force a static energy calculation and save the .gpw file
+                # Force a static energy calculation and save the .gpw.gz file
                 f.write("\n# Force static energy calculation (unrelaxed) and save\n")
                 f.write("energy = atoms.get_potential_energy()\n")
-                f.write("calc.write('relaxed.gpw')\n")
+                f.write("calc.write('relaxed.gpw.gz')\n")
 
     print("Workflow setup complete! You can now run the calculations.")
 

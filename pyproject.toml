@@ -49,6 +49,7 @@ tests = [
     "pytest-mpl>=0.16.1",
     "py-sc-fermi>=2.2.0",  # not required, but allows `FermiSolver` with `py-sc-fermi` backend to be tested, this version ensures full consistency
     "pytest-split>=0.10.0",  # for test splitting
+    "gpaw",  # for GPAW tests
 ]
 docs = [
     "sphinx>7,<9",  # current issue with Sphinx 9: https://github.com/sphinx-doc/sphinx/issues/14270; remove limit once resolved
@@ -138,4 +139,4 @@ wrap-descriptions = 79
 # argument descriptions
 
 [tool.codespell]
-ignore-words-list = "titel,te,bu,aack,unx,nd,efect,vise,mater,sise,dscribe,smll,atomate,coo,inout"  # lowercase!
+ignore-words-list = "titel,te,bu,aack,unx,nd,efect,vise,mater,sise,dscribe,smll,atomate,coo,inout,cyles"  # lowercase!

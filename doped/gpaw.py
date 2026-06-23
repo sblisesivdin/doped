@@ -157,7 +157,7 @@ dyn = {optimizer}(atoms, trajectory='relax.traj')
 dyn.run(fmax={fmax})
 
 # Save the final state
-calc.write('relaxed.gpw')
+calc.write('relaxed.gpw.gz')
 
 print(f"Final Energy: {{atoms.get_potential_energy()}} eV")
 """
@@ -241,7 +241,7 @@ def _get_planar_averaged_potential_from_calc(calc) -> dict[str, np.ndarray]:
 
 def get_gpaw_site_potentials(gpw_file: str) -> np.ndarray:
     """
-    Extracts atomic site potentials from a GPAW .gpw file.
+    Extracts atomic site potentials from a ``GPAW`` ``.gpw(.gz)`` file.
     """
     from gpaw import GPAW
 
@@ -259,7 +259,7 @@ def get_gpaw_site_potentials(gpw_file: str) -> np.ndarray:
 
 def get_gpaw_planar_averaged_potential(gpw_file: str) -> dict[str, np.ndarray]:
     """
-    Extracts planar-averaged potential from a GPAW .gpw file.
+    Extracts planar-averaged potential from a ``GPAW`` ``.gpw(.gz)`` file.
     """
     from gpaw import GPAW
 
@@ -287,7 +287,7 @@ class GPAWParser:
     def __init__(self, gpw_file: str):
         """
         Args:
-            gpw_file (str): Path to GPAW .gpw file.
+            gpw_file (str): Path to ``GPAW`` ``.gpw(.gz)`` file.
         """
         from gpaw import GPAW
 
@@ -372,13 +372,14 @@ def get_gpaw_defect_entry(
     """
     Convenience function to create a DefectEntry from GPAW directories.
 
-    Assumes 'relaxed.gpw' exists in both directories.
+    Assumes 'relaxed.gpw(.gz)' exists in both directories. # TODO: This should
+    auto-detect the output file, with a name preference, as for VASP
     """
-    defect_parser = GPAWParser(os.path.join(defect_path, "relaxed.gpw"))
+    defect_parser = GPAWParser(os.path.join(defect_path, "relaxed.gpw.gz"))
 
     close_bulk = False
     if bulk_parser is None:
-        bulk_parser = GPAWParser(os.path.join(bulk_path, "relaxed.gpw"))
+        bulk_parser = GPAWParser(os.path.join(bulk_path, "relaxed.gpw.gz"))
         close_bulk = True
 
     # Identify defect
@@ -469,20 +470,20 @@ class GPAWDefectsParser:
         ]
 
         # Instantiate bulk parser once
-        bulk_parser = GPAWParser(os.path.join(self.bulk_path, "relaxed.gpw"))
+        bulk_parser = GPAWParser(os.path.join(self.bulk_path, "relaxed.gpw.gz"))
 
         for folder in defect_folders:
             defect_dir = os.path.join(self.output_path, folder)
             if self.subfolder:
                 defect_dir = os.path.join(defect_dir, self.subfolder)
 
-            if not os.path.exists(os.path.join(defect_dir, "relaxed.gpw")):
+            if not os.path.exists(os.path.join(defect_dir, "relaxed.gpw.gz")):
                 continue
 
             print(f"Parsing {folder}...")
             try:
                 # Get charge from the calculation file directly
-                defect_parser = GPAWParser(os.path.join(defect_dir, "relaxed.gpw"))
+                defect_parser = GPAWParser(os.path.join(defect_dir, "relaxed.gpw.gz"))
                 charge_state = defect_parser.charge
                 defect_parser.close()
 

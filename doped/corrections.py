@@ -62,7 +62,6 @@ from doped.utils.parsing import (
     get_core_potentials_from_outcar,
     get_locpot,
     get_site_mapping_indices,
-    get_wigner_seitz_radius,
 )
 from doped.utils.plotting import doped_plot_style, format_defect_name
 
@@ -524,7 +523,9 @@ def get_kumagai_correction(
 
         if defect_region_radius is None:
             # 0.5 * np.pi / norm evaluates to d/4 (half the inscribed sphere radius)
-            distances = [0.5 * np.pi / np.linalg.norm(lattice.reciprocal_lattice.matrix[i]) for i in range(3)]
+            distances = [
+                0.5 * np.pi / np.linalg.norm(lattice.reciprocal_lattice.matrix[i]) for i in range(3)
+            ]
 
             if radius_method.lower() == "min":
                 defect_region_radius = np.min(distances)

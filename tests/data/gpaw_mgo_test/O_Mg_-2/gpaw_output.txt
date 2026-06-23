@@ -1,9 +1,9 @@
 
-  ___ ___ ___ _ _ _  
- |   |   |_  | | | | 
- | | | | | . | | | | 
+  ___ ___ ___ _ _ _
+ |   |   |_  | | | |
+ | | | | | . | | | |
  |__ |  _|___|_____|  25.7.0
- |___|_|             
+ |___|_|
 
 User:   sblisesivdin@feynman
 Date:   Mon Jun 22 16:03:42 2026
@@ -33,7 +33,7 @@ Input parameters:
   spinpol: True
   xc: PBE
 
-System changes: positions, numbers, cell, pbc, initial_charges, initial_magmoms 
+System changes: positions, numbers, cell, pbc, initial_charges, initial_magmoms
 
 Initialize ...
 
@@ -58,7 +58,7 @@ species:
       - 2p(6.00)   -46.613   1.085
       - 3p(0.00)    -1.330   1.085
       -  d           0.000   1.037
-  
+
     # Using partial waves for Mg as LCAO basis
 
   O:
@@ -81,7 +81,7 @@ species:
       -  s           3.251   0.688
       -  p          18.182   0.598
       -  d           0.000   0.619
-  
+
     # Using partial waves for O as LCAO basis
 
 Reference energy: -356135.072523  # eV
@@ -115,26 +115,26 @@ Wave functions: Plane wave expansion
   Using FFTW library
   ScaLapack parameters: grid=1x1, blocksize=None
   Wavefunction extrapolation:
-    Improved wavefunction reuse through dual PAW basis 
+    Improved wavefunction reuse through dual PAW basis
 
 Occupation numbers: Fermi-Dirac:
   width: 0.1000  # eV
- 
+
 
 Eigensolver
-   Davidson(niter=2) 
+   Davidson(niter=2)
 
 Densities:
   Coarse grid: 40*40*40 grid
   Fine grid: 80*80*80 grid
-  Total Charge: -2.000000 
+  Total Charge: -2.000000
 
 Density mixing:
   Method: difference
   Backend: pulay
   Linear mixing parameter: 0.05
   old densities: 5
-  Damping of long wavelength oscillations: 50 
+  Damping of long wavelength oscillations: 50
 
 Hamiltonian:
   XC and Coulomb potentials evaluated on a 80*80*80 grid
@@ -143,7 +143,7 @@ Hamiltonian:
     NoExternalPotential
 Poisson solver:
   Uniform background charge: -2.000 electrons
- 
+
 
 XC parameters: PBE with 2 nearest neighbor stencil
 
@@ -183,31 +183,31 @@ Density initialized from atomic densities
 Creating initial wave functions:
   464 bands from LCAO basis set
 
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg         OMg          O                    
-                    O           O                        
-               MOOMg       MO OMg                        
-           MgO          MgO          OMg                 
-                   OOMO        O OMO                     
-                OMgMg       OOMgMg       MgO             
-            O Mg        MOMg         MgO                 
-                   OMgMO        OMgMO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MgOO                
-                    OMgO        O MgO                    
-                               Mg           Mg           
-                          OMg          OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg         OMg          O
+                    O           O
+               MOOMg       MO OMg
+           MgO          MgO          OMg
+                   OOMO        O OMO
+                OMgMg       OOMgMg       MgO
+            O Mg        MOMg         MgO
+                   OMgMO        OMgMO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MgOO
+                    OMgO        O MgO
+                               Mg           Mg
+                          OMg          OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -1033,36 +1033,36 @@ Forces in eV/Ang:
  94 O    -0.07479   -0.22395    0.11375
  95 O    -1.11563    0.89272    2.25949
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg         OMg          O                    
-                    O           O                        
-               MOOMg       MO OMg                        
-           MgO          MgO          OMg                 
-                   OOMO        O OMO                     
-                OMgMg       OOMgMg       MgO             
-            O Mg        MOMg         MgO                 
-                   OMgMO        OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MgOO                
-                    OMgO        O MgO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg         OMg          O
+                    O           O
+               MOOMg       MO OMg
+           MgO          MgO          OMg
+                   OOMO        O OMO
+                OMgMg       OOMgMg       MgO
+            O Mg        MOMg         MgO
+                   OMgMO        OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MgOO
+                    OMgO        O MgO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -1880,36 +1880,36 @@ Forces in eV/Ang:
  94 O    -0.08622   -0.14099    0.05711
  95 O    -1.12880    0.87760    2.24002
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg         OMg          O                    
-                   O            O                        
-               MOOMg        O OMg                        
-           MgO          MgOMg        OMg                 
-                   OOMO        O OMO                     
-                OMgMg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOg        OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MgOO                
-                    OMgO        O MgO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg         OMg          O
+                   O            O
+               MOOMg        O OMg
+           MgO          MgOMg        OMg
+                   OOMO        O OMO
+                OMgMg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOg        OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MgOO
+                    OMgO        O MgO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -2730,36 +2730,36 @@ Forces in eV/Ang:
  94 O    -0.09480    0.10091   -0.13789
  95 O    -0.12731    0.07318    0.12611
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg         OMg          O                    
-                   O            O                        
-               MOOMg        O OMg                        
-           MgO          MgOMg        OMg                 
-                   OOMO        O OMO                     
-                OMgMg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOg        OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MgOO                
-                    OMgO        O MgO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg         OMg          O
+                   O            O
+               MOOMg        O OMg
+           MgO          MgOMg        OMg
+                   OOMO        O OMO
+                OMgMg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOg        OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MgOO
+                    OMgO        O MgO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -3576,36 +3576,36 @@ Forces in eV/Ang:
  94 O    -0.09311    0.02928   -0.08390
  95 O    -0.25072    0.17980    0.39173
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg          O                    
-                   O   O        O                        
-               MOOMg      O O OMg                        
-           MgO          MggMg        OMg                 
-                   OOMO        O  MO                     
-                OMgMg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOg        OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        O MgO                    
-                               Mg           Mg           
-                          OMg          OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg          O
+                   O   O        O
+               MOOMg      O O OMg
+           MgO          MggMg        OMg
+                   OOMO        O  MO
+                OMgMg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOg        OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        O MgO
+                               Mg           Mg
+                          OMg          OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -4425,36 +4425,36 @@ Forces in eV/Ang:
  94 O    -0.07206   -0.19765    0.06978
  95 O     0.15911   -0.06325   -0.32034
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg          O                    
-                   O   O        O                        
-               MOOMg      O O OMg                        
-           MgO          MggMg        OMg                 
-                   OOMO        O  MO                     
-                OMgMg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOg        OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        O MgO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg          O
+                   O   O        O
+               MOOMg      O O OMg
+           MgO          MggMg        OMg
+                   OOMO        O  MO
+                OMgMg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOg        OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        O MgO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -5266,36 +5266,36 @@ Forces in eV/Ang:
  94 O    -0.03714   -0.15895    0.05841
  95 O    -0.03216    0.04533    0.03759
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg          O                    
-                   O   O        O                        
-               MOOMg      O O OMg                        
-           MgO          MggMg        OMg                 
-                   OOMO        O OMO                     
-                OMgMg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOg        OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        O MgO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg          O
+                   O   O        O
+               MOOMg      O O OMg
+           MgO          MggMg        OMg
+                   OOMO        O OMO
+                OMgMg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOg        OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        O MgO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -6107,36 +6107,36 @@ Forces in eV/Ang:
  94 O     0.01734   -0.11258    0.03884
  95 O    -0.08819    0.04686    0.13457
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O            O                          
-            Mg          Mg                               
-                   O   O        O   O                    
-               MOOMg      O  OOMg                        
-           MgO          MggMg         Mg                 
-                   OOMO        O OMO O                   
-                OMgMg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOg        OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        O MgO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O            O
+            Mg          Mg
+                   O   O        O   O
+               MOOMg      O  OOMg
+           MgO          MggMg         Mg
+                   OOMO        O OMO O
+                OMgMg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOg        OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        O MgO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -6950,36 +6950,36 @@ Forces in eV/Ang:
  94 O     0.08186   -0.06208   -0.00202
  95 O    -0.08540    0.00401    0.11294
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O            O                          
-            Mg          Mg                               
-                   O   O        O   O                    
-               MOOMg      O  OOMg                        
-           MgO          MggMg         Mg                 
-                    OMO        O  MO O                   
-                OMgOg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOg        OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        O MgO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O            O
+            Mg          Mg
+                   O   O        O   O
+               MOOMg      O  OOMg
+           MgO          MggMg         Mg
+                    OMO        O  MO O
+                OMgOg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOg        OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        O MgO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -7793,36 +7793,36 @@ Forces in eV/Ang:
  94 O     0.12384   -0.03023   -0.02949
  95 O    -0.03447   -0.04362    0.02243
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O            O                          
-            Mg          Mg                               
-                   O   O        O   O                    
-                OOMg      O  OOMg                        
-           MgO Mg       MggMg         Mg                 
-                    OMO        O  MO O                   
-                OMgOg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOg        OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        O MgO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O            O
+            Mg          Mg
+                   O   O        O   O
+                OOMg      O  OOMg
+           MgO Mg       MggMg         Mg
+                    OMO        O  MO O
+                OMgOg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOg        OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        O MgO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -8635,36 +8635,36 @@ Forces in eV/Ang:
  94 O     0.12023   -0.02637   -0.03509
  95 O     0.01328   -0.06577   -0.05632
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg                               
-                   O   O        O   O                    
-                OOMg      O  OOMg                        
-           Mg OMg       MggMg         Mg                 
-                    OMO        O  MO O                   
-                OMgOg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOg        OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        O MgO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg
+                   O   O        O   O
+                OOMg      O  OOMg
+           Mg OMg       MggMg         Mg
+                    OMO        O  MO O
+                OMgOg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOg        OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        O MgO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -9477,36 +9477,36 @@ Forces in eV/Ang:
  94 O     0.10079   -0.03134   -0.02790
  95 O     0.05032   -0.06954   -0.11265
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg                               
-                   O   O        O   O                    
-                OOMg      O  OOMg                        
-           Mg OMg       MggMg         Mg                 
-                    OMO        O  MO O                   
-                OMgOg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOgO       OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        OMgMO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg
+                   O   O        O   O
+                OOMg      O  OOMg
+           Mg OMg       MggMg         Mg
+                    OMO        O  MO O
+                OMgOg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOgO       OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        OMgMO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -10319,36 +10319,36 @@ Forces in eV/Ang:
  94 O     0.08404   -0.02522   -0.01285
  95 O     0.04115   -0.05315   -0.08687
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg                               
-                   O   O        O   O                    
-                OOMg      O  OOMg                        
-           Mg OMg       MggMg         Mg                 
-                    OMO        O  MO O                   
-                OMgOg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOgO       OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        OMgMO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg
+                   O   O        O   O
+                OOMg      O  OOMg
+           Mg OMg       MggMg         Mg
+                    OMO        O  MO O
+                OMgOg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOgO       OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        OMgMO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -11161,36 +11161,36 @@ Forces in eV/Ang:
  94 O     0.06732   -0.01019    0.00803
  95 O     0.01143   -0.03236   -0.02806
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg                               
-                   O   O        O   O                    
-                OOMg         OOMg                        
-           Mg OMg       MgOMg         Mg                 
-                    OMO O      O OMO O                   
-                OMgOg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOgO       OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        OMgMO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg
+                   O   O        O   O
+                OOMg         OOMg
+           Mg OMg       MgOMg         Mg
+                    OMO O      O OMO O
+                OMgOg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOgO       OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        OMgMO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -12003,36 +12003,36 @@ Forces in eV/Ang:
  94 O     0.04958    0.00942    0.02698
  95 O    -0.01760   -0.01534    0.02803
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg                               
-                   O   O        O   O                    
-                OOMg         OOMg                        
-           Mg OMg       MgOMg         Mg                 
-                    OMO O      O OMO O                   
-                OMgOg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOgO       OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        OMgMO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg
+                   O   O        O   O
+                OOMg         OOMg
+           Mg OMg       MgOMg         Mg
+                    OMO O      O OMO O
+                OMgOg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOgO       OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        OMgMO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -12845,36 +12845,36 @@ Forces in eV/Ang:
  94 O     0.03557    0.01888    0.03121
  95 O    -0.02241   -0.01000    0.04049
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg                               
-                   O   O        O   O                    
-                OOMg         OOMg                        
-           Mg OMg       MgOMg         Mg                 
-                    OMO O      O OMO O                   
-                OMgOg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOgO       OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        OMgMO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg
+                   O   O        O   O
+                OOMg         OOMg
+           Mg OMg       MgOMg         Mg
+                    OMO O      O OMO O
+                OMgOg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOgO       OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        OMgMO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -13685,36 +13685,36 @@ Forces in eV/Ang:
  94 O     0.02045    0.00974    0.02020
  95 O    -0.00946   -0.00953    0.01856
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg                               
-                   O   O        O   O                    
-                OOMg         OOMg                        
-           Mg OMg       MgOMg         Mg                 
-                    OMO O      O  MO O                   
-                OMgOg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOgO       OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        OMgMO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg
+                   O   O        O   O
+                OOMg         OOMg
+           Mg OMg       MgOMg         Mg
+                    OMO O      O  MO O
+                OMgOg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOgO       OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        OMgMO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -14525,36 +14525,36 @@ Forces in eV/Ang:
  94 O     0.02554    0.00497    0.01118
  95 O     0.00342   -0.01216   -0.00263
 
-System changes: positions 
+System changes: positions
 
 Initializing position-dependent things.
 
 Density initialized from wave functions
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg          Mg                               
-                   O   O        O   O                    
-                OOMg         OOMg                        
-           Mg OMg       MgOMg         Mg                 
-                    OMO O      O  MO O                   
-                OMgOg       OOMgMg       MgO             
-            O Mg        MOMg         MggO                
-                   OMgOgO       OMggO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MO O                
-                    OMgO        OMgMO                    
-                           Mg  Mg           Mg           
-                          O            OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg          Mg
+                   O   O        O   O
+                OOMg         OOMg
+           Mg OMg       MgOMg         Mg
+                    OMO O      O  MO O
+                OMgOg       OOMgMg       MgO
+            O Mg        MOMg         MggO
+                   OMgOgO       OMggO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MO O
+                    OMgO        OMgMO
+                           Mg  Mg           Mg
+                          O            OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -15365,7 +15365,7 @@ Forces in eV/Ang:
  94 O     0.01518   -0.01357    0.00525
  95 O     0.01405   -0.00464   -0.02257
 
-Writing to relaxed.gpw (mode='')
+Writing to relaxed.gpw.gz (mode='')
 
 Timing:                                      incl.     excl.
 -------------------------------------------------------------------

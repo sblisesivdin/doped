@@ -29,7 +29,7 @@ The workflow for GPAW defect calculations follows the standard ``doped`` logic:
 1.  **Generation**: Generate defect structures using ``DefectsGenerator``.
 2.  **Input Preparation**: Write GPAW Python scripts and structure files using ``GPAWDefectRelaxSet``.
 3.  **Execution**: Run the calculations using GPAW (typically via ``mpirun``).
-4.  **Parsing**: Parse the results (``.gpw`` files) using ``GPAWDefectsParser``.
+4.  **Parsing**: Parse the results (``.gpw(.gz)`` files) using ``GPAWDefectsParser``.
 5.  **Analysis**: Perform thermodynamic analysis and plotting.
 
 Input Generation
@@ -62,7 +62,7 @@ It produces a ``relax.py`` script and a ``structure.cif`` file.
 Parsing Results
 ---------------
 
-Once calculations are complete, ``doped`` can parse the resulting ``relaxed.gpw`` files. 
+Once calculations are complete, ``doped`` can parse the resulting ``relaxed.gpw(.gz)`` files.
 The ``GPAWDefectsParser`` can handle multiple defect folders at once.
 
 .. code-block:: python

@@ -14,12 +14,12 @@ def run_calculation(folder):
     print(f"Processing {folder}...")
     relax_script = os.path.join(folder, "relax.py")
     
-    if os.path.exists(os.path.join(folder, "relaxed.gpw")):
-        print(f"  relaxed.gpw exists, skipping calculation.")
+    if os.path.exists(os.path.join(folder, "relaxed.gpw.gz")):
+        print(f"  relaxed.gpw.gz exists, skipping calculation.")
         return
 
     if os.path.exists(os.path.join(folder, "gpaw_output.txt")):
-        print(f"  gpaw_output.txt exists but relaxed.gpw does not. Skipping likely failed calculation.")
+        print(f"  gpaw_output.txt exists but relaxed.gpw.gz does not. Skipping likely failed calculation.")
         return
 
     if not os.path.exists(relax_script):
@@ -39,7 +39,7 @@ def run_calculation(folder):
         
     except subprocess.CalledProcessError as e:
         # Smart check for the MPI garbage collection errors we discussed previously
-        if os.path.exists(os.path.join(folder, "relaxed.gpw")):
+        if os.path.exists(os.path.join(folder, "relaxed.gpw.gz")):
             print("  Done!")
         else:
             print(f"  Calculation failed. Error log:\n{e.stderr}")

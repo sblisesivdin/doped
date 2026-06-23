@@ -1,21 +1,19 @@
-
 from ase.io import read
-from gpaw import GPAW, PW, LCAO, FD
 from ase.optimize import BFGS
-import json
+from gpaw import GPAW, PW
 
 # Read structure
-atoms = read('structure.cif')
+atoms = read("structure.cif")
 
 # Setup calculator
 calc = GPAW(
     mode=PW(ecut=200),
-    xc='PBE',
-    kpts={'size': (1, 1, 1), 'gamma': True},
-    txt='gpaw_output.txt',
+    xc="PBE",
+    kpts={"size": (1, 1, 1), "gamma": True},
+    txt="gpaw_output.txt",
     convergence={},
     charge=-2,
-    spinpol=True
+    spinpol=True,
 )
 
 atoms.calc = calc
@@ -25,10 +23,10 @@ energy = atoms.get_potential_energy()
 print(f"Initial Energy: {energy} eV")
 
 # Relaxation
-dyn = BFGS(atoms, trajectory='relax.traj')
+dyn = BFGS(atoms, trajectory="relax.traj")
 dyn.run(fmax=5.0)
 
 # Save the final state
-calc.write('relaxed.gpw')
+calc.write("relaxed.gpw.gz")
 
 print(f"Final Energy: {atoms.get_potential_energy()} eV")

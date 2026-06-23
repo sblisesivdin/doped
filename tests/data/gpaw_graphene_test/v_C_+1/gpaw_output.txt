@@ -1,9 +1,9 @@
 
-  ___ ___ ___ _ _ _  
- |   |   |_  | | | | 
- | | | | | . | | | | 
+  ___ ___ ___ _ _ _
+ |   |   |_  | | | |
+ | | | | | . | | | |
  |__ |  _|___|_____|  25.7.0
- |___|_|             
+ |___|_|
 
 User:   sblisesivdin@feynman
 Date:   Mon Jun  1 18:32:20 2026
@@ -33,7 +33,7 @@ Input parameters:
   spinpol: True
   xc: PBE
 
-System changes: positions, numbers, cell, pbc, initial_charges, initial_magmoms 
+System changes: positions, numbers, cell, pbc, initial_charges, initial_magmoms
 
 Initialize ...
 
@@ -58,7 +58,7 @@ species:
       -  s          13.461   0.635
       -  p          21.927   0.635
       -  d           0.000   0.635
-  
+
     # Using partial waves for C as LCAO basis
 
 Reference energy: -31856.471580  # eV
@@ -92,26 +92,26 @@ Wave functions: Plane wave expansion
   Using FFTW library
   ScaLapack parameters: grid=1x1, blocksize=None
   Wavefunction extrapolation:
-    Improved wavefunction reuse through dual PAW basis 
+    Improved wavefunction reuse through dual PAW basis
 
 Occupation numbers: Fermi-Dirac:
   width: 0.1000  # eV
- 
+
 
 Eigensolver
-   Davidson(niter=2) 
+   Davidson(niter=2)
 
 Densities:
   Coarse grid: 35*35*70 grid
   Fine grid: 70*70*140 grid
-  Total Charge: 1.000000 
+  Total Charge: 1.000000
 
 Density mixing:
   Method: difference
   Backend: pulay
   Linear mixing parameter: 0.05
   old densities: 5
-  Damping of long wavelength oscillations: 50 
+  Damping of long wavelength oscillations: 50
 
 Hamiltonian:
   XC and Coulomb potentials evaluated on a 70*70*140 grid
@@ -120,7 +120,7 @@ Hamiltonian:
     NoExternalPotential
 Poisson solver:
   Uniform background charge: 1.000 electrons
- 
+
 
 XC parameters: PBE with 2 nearest neighbor stencil
 
@@ -160,19 +160,19 @@ Density initialized from atomic densities
 Creating initial wave functions:
   78 bands from LCAO basis set
 
-                                                
-                                                
-                                                
-                                                
-            C     C     C     C                 
-             C   C  C  C  C  C  C  C            
-             C C   C C     C   C C              
-              C  C  C  C  C  C   C C            
-                C     C     C     C             
-                                                
-                                                
-                                                
-                                                
+
+
+
+
+            C     C     C     C
+             C   C  C  C  C  C  C  C
+             C C   C C     C   C C
+              C  C  C  C  C  C   C C
+                C     C     C     C
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -417,7 +417,7 @@ Forces in eV/Ang:
  29 C     0.77477    0.44687    0.00000
  30 C    -0.81785    0.90664    0.00000
 
-Writing to relaxed.gpw (mode='')
+Writing to relaxed.gpw.gz (mode='')
 
 Timing:                              incl.     excl.
 -----------------------------------------------------------

@@ -1,9 +1,9 @@
 
-  ___ ___ ___ _ _ _  
- |   |   |_  | | | | 
- | | | | | . | | | | 
+  ___ ___ ___ _ _ _
+ |   |   |_  | | | |
+ | | | | | . | | | |
  |__ |  _|___|_____|  25.7.0
- |___|_|             
+ |___|_|
 
 User:   sblisesivdin@feynman
 Date:   Mon Jun 22 09:46:10 2026
@@ -33,7 +33,7 @@ Input parameters:
   spinpol: True
   xc: PBE
 
-System changes: positions, numbers, cell, pbc, initial_charges, initial_magmoms 
+System changes: positions, numbers, cell, pbc, initial_charges, initial_magmoms
 
 Initialize ...
 
@@ -58,7 +58,7 @@ species:
       - 2p(6.00)   -46.613   1.085
       - 3p(0.00)    -1.330   1.085
       -  d           0.000   1.037
-  
+
     # Using partial waves for Mg as LCAO basis
 
   O:
@@ -81,7 +81,7 @@ species:
       -  s           3.251   0.688
       -  p          18.182   0.598
       -  d           0.000   0.619
-  
+
     # Using partial waves for O as LCAO basis
 
 Reference energy: -362952.657698  # eV
@@ -115,26 +115,26 @@ Wave functions: Plane wave expansion
   Using FFTW library
   ScaLapack parameters: grid=1x1, blocksize=None
   Wavefunction extrapolation:
-    Improved wavefunction reuse through dual PAW basis 
+    Improved wavefunction reuse through dual PAW basis
 
 Occupation numbers: Fermi-Dirac:
   width: 0.1000  # eV
- 
+
 
 Eigensolver
-   Davidson(niter=2) 
+   Davidson(niter=2)
 
 Densities:
   Coarse grid: 40*40*40 grid
   Fine grid: 80*80*80 grid
-  Total Charge: 1.000000 
+  Total Charge: 1.000000
 
 Density mixing:
   Method: difference
   Backend: pulay
   Linear mixing parameter: 0.05
   old densities: 5
-  Damping of long wavelength oscillations: 50 
+  Damping of long wavelength oscillations: 50
 
 Hamiltonian:
   XC and Coulomb potentials evaluated on a 80*80*80 grid
@@ -143,7 +143,7 @@ Hamiltonian:
     NoExternalPotential
 Poisson solver:
   Uniform background charge: 1.000 electrons
- 
+
 
 XC parameters: PBE with 2 nearest neighbor stencil
 
@@ -183,31 +183,31 @@ Density initialized from atomic densities
 Creating initial wave functions:
   467 bands from LCAO basis set
 
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
-                 O           O                           
-            Mg         OMg          O                    
-                    O           O                        
-               MOOMg       MO OMg                        
-           MgO          MgO          OMg                 
-                   OOMO        O OMO                     
-                OMgMg       MOMgMg       MgO             
-            O Mg        MOMgg        MgO                 
-                   OMgMO        OMgMO                    
-                  Mg        MgOMgg       MO  Mg          
-              Mg         MOMg        MgOO                
-                    OMgO        O MgO                    
-                               Mg           Mg           
-                          OMg          OMg               
-                     Mg           Mg                     
-                                                         
-                                                         
-                                                         
-                                                         
-                                                         
+
+
+
+
+
+                 O           O
+            Mg         OMg          O
+                    O           O
+               MOOMg       MO OMg
+           MgO          MgO          OMg
+                   OOMO        O OMO
+                OMgMg       MOMgMg       MgO
+            O Mg        MOMgg        MgO
+                   OMgMO        OMgMO
+                  Mg        MgOMgg       MO  Mg
+              Mg         MOMg        MgOO
+                    OMgO        O MgO
+                               Mg           Mg
+                          OMg          OMg
+                     Mg           Mg
+
+
+
+
+
 
 Atomic positions and initial magnetic moments
 
@@ -942,9 +942,9 @@ Gap: 3.452 eV
 Transition (v -> c):
   (s=1, k=0, n=384, [0.00, 0.00, 0.00]) -> (s=0, k=0, n=385, [0.00, 0.00, 0.00])
 No difference between direct/indirect transitions
-Writing to relaxed.gpw (mode='')
+Writing to relaxed.gpw.gz (mode='')
 
-Writing to relaxed.gpw (mode='')
+Writing to relaxed.gpw.gz (mode='')
 
 Timing:                              incl.     excl.
 -----------------------------------------------------------
