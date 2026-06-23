@@ -27,7 +27,8 @@ repos:
     rev: v2.1.0
     hooks:
       - id: mypy
-        <<: *skip_docs
+        # type-check the ``doped`` package + test modules directly under ``tests/``:
+        files: ^(doped/|tests/[^/]+\.py$)
         additional_dependencies:
           - numpy
           - pandas

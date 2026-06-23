@@ -78,6 +78,8 @@ exclude = ["examples*", "*testing", "tests*", "docs*"]
 
 [tool.ruff]
 line-length = 107
+extend-exclude = ["tests/data"]  # test data files (e.g. GPAW ``relax.py`` inputs), not source code
+force-exclude = true  # also exclude when paths are passed explicitly (e.g. by pre-commit)
 lint.pydocstyle.convention = "google"
 lint.isort.split-on-trailing-comma = false
 lint.select = [  # from pymatgen
@@ -126,7 +128,7 @@ lint.ignore = [
 
 [tool.mypy]
 python_version = "3.14"
-files = ["doped"]
+files = ["doped", "tests/*.py"]  # ``doped`` package + test modules directly under ``tests/`` (not test data)
 ignore_missing_imports = true  # doped depends on scientific libraries that don't have type stubs (pymatgen, vise, ...)
 
 [tool.docformatter]
