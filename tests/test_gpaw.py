@@ -4,6 +4,7 @@ Tests for the GPAW interface in ``doped.gpaw``.
 
 import os
 import shutil
+import unittest
 
 import numpy as np
 import pytest
@@ -11,12 +12,10 @@ from pymatgen.core.structure import Structure
 
 from doped.gpaw import GPAWDefectRelaxSet, GPAWDefectsParser
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
-
-class TestGPAW:
-    def setup_method(self):
-        self.data_dir = DATA_DIR
+class GPAWTest(unittest.TestCase):
+    def setUp(self):
+        self.data_dir = os.path.join(os.path.dirname(__file__), "data")
         self.output_dir = "gpaw_test_outputs"
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
@@ -24,7 +23,7 @@ class TestGPAW:
         # Create a simple structure for testing input generation
         self.structure = Structure.from_file(os.path.join(self.data_dir, "Cu_prim_POSCAR"))
 
-    def teardown_method(self):
+    def tearDown(self):
         if os.path.exists(self.output_dir):
             shutil.rmtree(self.output_dir)
 
