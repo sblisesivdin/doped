@@ -1,83 +1,75 @@
 import os
-from pymatgen.core import Structure
+from pymatgen.core.structure import Structure
+from pymatgen.core.lattice import Lattice
 from doped.generation import DefectsGenerator
 from doped.gpaw import GPAWDefectRelaxSet
 
 def main():
-    # Point to the relaxed bulk POSCAR
-    poscar_path = "../MgO/Bulk_relax/POSCAR" 
-    
-    print(f"Loading MgO bulk structure from {poscar_path}...")
-    bulk_structure = Structure.from_file(poscar_path)
+    print("Generating MgO bulk structure natively...")
+    # Native structure generation
+    lattice = Lattice.cubic(4.21)
+    bulk_structure = Structure.from_spacegroup("Fm-3m", lattice, ["Mg", "O"], [[0, 0, 0], [0.5, 0.5, 0.5]])
 
-    print("Generating MgO defects...")
-    # Generate the defects using doped
-    defect_gen = DefectsGenerator(bulk_structure)
+    print("Generating MgO defects (forcing Mg_O antisites)...")
+    # Force the generation of the Mg_O antisite using the extrinsic flag
+    defect_gen = DefectsGenerator(bulk_structure, extrinsic={"O": "Mg"})
 
     # GPAW Parameters
-    gpaw_kwargs = {
-        "mode": "PW",
-        "ecut": 250,
-        "kpts": (1, 1, 1),
-        "xc": "PBE",
-        "symmetry": "off"
+    gpaw_settings = {
+        "mode": {"name": "pw", "ecut": 250},
+        "kpts": {"size": (1, 1, 1), "gamma": True},
+        "xc": "PBE"
     }
 
     print("Writing GPAW input files...")
-    # Setup Bulk
-    # Note: For bulk, we need to use a supercell so it matches the defect size!
-    # The DefectsGenerator automatically determines the optimal supercell matrix.
-    bulk_supercell = bulk_structure.copy()
-    bulk_supercell.make_supercell(defect_gen.supercell_matrix)
     
-    bulk_set = GPAWDefectRelaxSet(bulk_supercell, **gpaw_kwargs)
+    # Setup Bulk using the finalized API parameters
+    bulk_set = GPAWDefectRelaxSet(
+        defect_gen.bulk_supercell, 
+        charge_state=0, 
+        gpaw_settings=gpaw_settings
+    )
     bulk_set.write_input("bulk")
 
     # Setup Defects
-    for defect_name, defect_entry in defect_gen.items():
-        # To save time and space, let's just generate the Magnesium Vacancy
-        # specifically the -2 charge state which is typically used for tests.
-        if "v_Mg" not in defect_name:
-            continue
+    for defect_name, defect_entry in defect_gen.defect_entries.items():
+        #Example of Filtering defects: Allow both Magnesium Vacancies AND Magnesium Antisites.
+        #if "v_Mg" not in defect_name and "Mg_O" not in defect_name:
+        #    continue
 
         print(f"Setting up {defect_name}...")
         
-        # defect_entry.defect.get_supercell_structure() gets the defective supercell
-        defect_struct = defect_entry.defect.get_supercell_structure(
-            sc_mat=defect_gen.supercell_matrix
-        )
-        
-        # defect_entry.charge_state gives the specific charge for this entry
+        # Pass the entry directly, and use the gpaw_settings dictionary
         defect_set = GPAWDefectRelaxSet(
-            defect_struct, 
-            charge=defect_entry.charge_state, 
-            **gpaw_kwargs
+            defect_entry, 
+            charge_state=defect_entry.charge_state, 
+            gpaw_settings=gpaw_settings
         )
         defect_set.write_input(defect_name)
         
-        # A part to create an example of unrelaxed structure with +1 state
+        # Create an example of an unrelaxed structure for the +1 state
         if "+1" in defect_name:
             unrelaxed_name = defect_name + "_unrelaxed"
             print(f"Setting up {unrelaxed_name}...")
             
-            # Generate the exact same input files in a new folder
             defect_set.write_input(unrelaxed_name)
             
-            # Open the generated relax.py and modify it for a static run
+            # Open the generated relax.py and modify it for a static single-point run
             relax_file = os.path.join(unrelaxed_name, "relax.py")
             with open(relax_file, "r") as f:
-                script = f.read()
+                lines = f.readlines()
                 
-            # Comment out the ASE optimizer command so the atoms don't move
-            script = script.replace("opt.run", "# opt.run") 
-            
-            # Force a static energy calculation and save the .gpw file
-            script += "\n# Force static energy calculation (unrelaxed) and save\n"
-            script += "atoms.get_potential_energy()\n"
-            script += "calc.write('relaxed.gpw')\n"
-            
             with open(relax_file, "w") as f:
-                f.write(script)
+                for line in lines:
+                    # Strip out the ASE optimizer logic robustly
+                    if "ase.optimize" in line or "BFGS" in line or "dyn" in line:
+                        continue
+                    f.write(line)
+                
+                # Force a static energy calculation and save the .gpw file
+                f.write("\n# Force static energy calculation (unrelaxed) and save\n")
+                f.write("energy = atoms.get_potential_energy()\n")
+                f.write("calc.write('relaxed.gpw')\n")
 
     print("Workflow setup complete! You can now run the calculations.")
 
